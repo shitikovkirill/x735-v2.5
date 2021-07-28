@@ -6,13 +6,14 @@ setuptools.setup(
     description="Library for board x735",
     author="sh.kiruh@gmail.com",
     install_requires=[
-        "pigpio",
+        "pigpio==1.78",
+        "click==8.0.1",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
     ],
     entry_points={
-        "console_scripts": ["pwm_fan_control=pwm_fan_control"],
+        "console_scripts": ["x735fan=main:fan"],
     },
 )

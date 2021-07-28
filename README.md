@@ -23,3 +23,10 @@ sudo ./uninstall.sh
 sudo ./read_fan_speed.py
 ```
 After a reboot, we can run ```sudo read_fan_speed.py``` to get an update on the fan's current speed.  Nice!
+
+# Develop
+
+```
+python3 -m venv venv
+pip install -e .
+```
