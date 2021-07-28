@@ -1,6 +1,6 @@
 import click
 import time
-from fan import Fan, get_cpu_temp, get_fun_speed
+from fan import SetFan, ReedFan, get_cpu_temp, get_fun_speed
 
 
 @click.group()
@@ -16,7 +16,7 @@ def fan(ctx, debug):
 @click.pass_context
 def run(ctx):
     """Script for running fan"""
-    fan = Fan()
+    fan = SetFan()
     while True:
         temp = get_cpu_temp()
         if ctx.obj['DEBUG']:
@@ -34,3 +34,9 @@ def run(ctx):
 @click.pass_context
 def info(ctx):
     """Print fan debug info"""
+    fan = ReedFan()
+    event = fan.get_turnover()
+    if event:
+        print("event detected")
+    else:
+        print("wait for event timed out")

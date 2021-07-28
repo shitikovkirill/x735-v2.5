@@ -1,7 +1,20 @@
 import pigpio
 
 
-class Fan:
+class ReedFan:
+    __slots__ = ['pin', 'pi']
+
+    def __init__(self):
+        self.pin = 16
+        self.pi = pigpio.pi()
+        self.pi.set_mode(self.pin, pigpio.IN)
+        self.pi.set_pull_up_down(self.pin, pigpio.PUD_UP)
+
+    def get_turnover(self):
+        return self.pi.wait_for_event(self.pin, 5*60)
+
+
+class SetFan:
     
     __slots__ = ['pin', 'pwm']
 
