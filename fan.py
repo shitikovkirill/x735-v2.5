@@ -7,7 +7,7 @@ class ReedFan:
     def __init__(self):
         self.pin = 16
         self.pi = pigpio.pi()
-        self.pi.set_mode(self.pin, pigpio.IN)
+        self.pi.set_mode(self.pin, pigpio.INPUT)
         self.pi.set_pull_up_down(self.pin, pigpio.PUD_UP)
 
     def get_turnover(self):
