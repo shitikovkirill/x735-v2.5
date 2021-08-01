@@ -1,28 +1,59 @@
 # x735-v2.5
 This is the safe shutdown script and some python sample code.
 
-from: https://wiki.geekworm.com/X735_V2.5_Software
-> install
+## Install
+
 Assuming your system is updated, add these packages:
+
+### Install dependencies
+
 ```
 sudo apt-get install python-smbus
-sudo apt-get install pigpio python-pigpio python3-pigpio
-git clone https://github.com/geekworm-com/x735-v2.5
-cd x735-v2.5
-sudo chmod +x *.sh
-sudo bash install.sh
-sudo reboot
+sudo apt-get install pigpio python3-pigpio
 ```
 
->uninstall
+### Add package
+
 ```
-sudo ./uninstall.sh
+sudo pip3 install x735-v2.5
 ```
->read-fan-speed
+
+### Add service to systemd
+
 ```
-sudo ./read_fan_speed.py
+cat > sudo /etc/systemd/system/x735fan.service <<- EOM
+[Unit]
+Description=Run fan for x735 board
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/python3 /usr/local/bin/x735fan run
+
+[Install]
+WantedBy=multi-user.target
+EOM
+
+sudo systemctl daemon-reload
+sudo systemctl enable x735fan.service
+sudo systemctl start x735fan.service
+sudo systemctl status x735fan.service
 ```
-After a reboot, we can run ```sudo read_fan_speed.py``` to get an update on the fan's current speed.  Nice!
+
+## Update
+
+```
+sudo pip3 install x735-v2.5 -U
+```
+
+# Use
+
+```
+x735fan run  # Run set speed
+x735fan info # Get fan information
+```
 
 # Develop
 
