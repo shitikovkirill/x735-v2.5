@@ -11,7 +11,7 @@ git_url = "https://github.com/shitikovkirill/x735-v2.5"
 
 setuptools.setup(
     name="x735-v2.5",
-    version="0.1.4",
+    version="0.1.6",
     description="Library for board x735",
     author="sh.kiruh@gmail.com",
     install_requires=[

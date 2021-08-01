@@ -1,7 +1,7 @@
 import click
 import time
-from fan import SetFan, ReedFan, get_cpu_temp, get_fun_speed
-from config import fun_speed_range
+from x735.fan import SetFan, ReedFan, get_cpu_temp, get_fun_speed
+from x735.config import fun_speed_range
 
 
 @click.group()
