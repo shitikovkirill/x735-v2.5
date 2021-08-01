@@ -38,6 +38,15 @@ def info(ctx):
     fan = ReedFan()
     fan.subscribe_turnover()
     while True:
-        click.echo("{0:.2f} RPM".format(fan.rpm))
+        temp = get_cpu_temp()
+        click.echo("Temperatura {}".format(temp))
+
+        fun_speed = get_fun_speed(temp, fun_speed_range)
+        click.echo("Calculated fun speed {}".format(fun_speed))
+
+        click.echo("Fun {0:.2f} RPM".format(fan.rpm))
         fan.rpm = 0
+
+        click.echo("---------- Loop ---------")
+
         time.sleep(1)
