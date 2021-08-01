@@ -20,7 +20,7 @@ sudo pip3 install x735-v2.5
 
 ### Add service to systemd
 
-```
+``
 cat > sudo /etc/systemd/system/x735fan.service <<- EOM
 [Unit]
 Description=Run fan for x735 board
@@ -40,7 +40,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable x735fan.service
 sudo systemctl start x735fan.service
 sudo systemctl status x735fan.service
-```
+``
 
 ## Update
 
