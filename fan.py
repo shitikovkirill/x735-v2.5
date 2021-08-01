@@ -1,22 +1,41 @@
 import pigpio
+import RPi.GPIO as GPIO
+import time
 
 
 class ReedFan:
-    __slots__ = ['pin', 'pi']
+    __slots__ = ["rpm", "pin", "pulse", "wait_time"]
 
     def __init__(self):
+        self.rpm = 0
         self.pin = 16
-        self.pi = pigpio.pi()
-        self.pi.set_mode(self.pin, pigpio.INPUT)
-        self.pi.set_pull_up_down(self.pin, pigpio.PUD_UP)
+        self.pulse = 2
+        self.wait_time = 1
 
-    def get_turnover(self):
-        return self.pi.wait_for_event(self.pin, 5*60)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def subscribe_turnover(self):
+        t = time.time()
+
+        def fell(n):
+            nonlocal t
+
+            dt = time.time() - t
+            if dt < 0.005:
+                return
+
+            freq = 1 / dt
+            self.rpm = (freq / self.pulse) * 60
+            t = time.time()
+
+        GPIO.add_event_detect(self.pin, GPIO.FALLING, fell)
 
 
 class SetFan:
-    
-    __slots__ = ['pin', 'pwm']
+
+    __slots__ = ["pin", "pwm"]
 
     def __init__(self):
         self.pin = 13
@@ -24,7 +43,7 @@ class SetFan:
         self.pwm.set_mode(self.pin, pigpio.OUTPUT)
         self.pwm.set_PWM_frequency(self.pin, 25000)
         self.pwm.set_PWM_range(self.pin, 100)
-        
+
     def set_speed(self, speed):
         self.pwm.set_PWM_dutycycle(self.pin, speed)
 
@@ -35,23 +54,21 @@ def get_cpu_temp():
     """
     with open("/sys/class/thermal/thermal_zone0/temp") as file:
         temp = float(file.read()) / 1000.00
-        temp = float('%.2f' % temp)
+        temp = float("%.2f" % temp)
     return temp
 
 
-def get_fun_speed(temp):
+def get_fun_speed(temp, speed_config):
     """
     Calculate fun speed by temperature
     """
     fun_speed = 0
-    if 50 <= temp > 30:
-        fun_speed = 40
-    elif 55 <= temp > 50:
-        fun_speed = 50
-    elif 60 <= temp > 55:
-        fun_speed = 75
-    elif 65 <= temp > 60:
-        fun_speed = 90
-    elif temp > 65:
-        fun_speed = 100
+    for item in speed_config:
+        if item.get("maxt"):
+            if item["mint"] < temp <= item["maxt"]:
+                fun_speed = item["speed"]
+        else:
+            if item["mint"] < temp:
+                fun_speed = item["speed"]
+
     return fun_speed

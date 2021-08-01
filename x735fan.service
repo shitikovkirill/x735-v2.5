@@ -1,0 +1,12 @@
+[Unit]
+Description=Run fan for x735 board
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/local/bin/x735fun run
+
+[Install]
+WantedBy=multi-user.target
