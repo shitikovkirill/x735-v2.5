@@ -30,3 +30,9 @@ After a reboot, we can run ```sudo read_fan_speed.py``` to get an update on the 
 python3 -m venv venv
 pip install -e .
 ```
+
+## Deploy to pypi
+```
+python setup.py register -r pypi
+python setup.py sdist upload -r pypi
+```
