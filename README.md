@@ -68,3 +68,9 @@ pip install -e .
 python setup.py register -r pypi
 python setup.py sdist upload -r pypi
 ```
+
+## NixOs
+
+```bash
+nix-shell -I nixpkgs=channel:nixpkgs-unstable
+```
