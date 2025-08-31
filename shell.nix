@@ -1,11 +1,7 @@
-with import <nixpkgs> { };
+{ pkgs ? import <nixpkgs> {} }:
+
+with pkgs;
 
 mkShell {
-  buildInputs = [ python3 stdenv.cc.cc.lib gcc zlib openssl ];
-
-  shellHook = ''
-    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}
-    export CFLAGS="-I${pkgs.zlib.dev}/include"
-    export LDFLAGS="-L${pkgs.zlib.out}/lib"
-  '';
+  buildInputs = [ (python3.withPackages (python-pkgs: [ python-pkgs.rpi-gpio python-pkgs.click python-pkgs.pigpio ])) ];
 }
